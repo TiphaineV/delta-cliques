@@ -31,19 +31,18 @@ class Clique:
                     for n in neighbors:
                         # On regarde si le lien est apparu entre tb et te
                         is_present = False
-                        index_tb = -1	
                         if self._tb in times[frozenset([u,n])]:
-                           index_tb = times[frozenset([u,n])].index(self._tb)
-                           is_present = True
+				self._candidates.add(n)
 
-                           if is_present:
-                               self._candidates.add(n)
+                        if self._te in times[frozenset([u,n])]:
+                        	self._candidates.add(n)
+
 
                     self._candidates = self._candidates.difference(self._X)
 	    return self._candidates
 
 	def getFirstTInInterval(self, times, nodes, td, delta):
-		# Plus petit t entre te et td + delta impliquant (u,v) ? 
+		# Plus petit t entre te et td + delta impliquant (u,v) ?
 		t =  None
 		# Bien extraire tous les noeuds de la clique et du voisinage de chaque noeud de la clique (c'est ici qu'on fait grossir le temps pour pouvoir ajouter des noeuds)
 		# Get all links implying at least one of X's nodes.
@@ -51,29 +50,27 @@ class Clique:
 		for u in self._X:
 			for n_u in nodes[u]:
 				link = frozenset([u,n_u])
+
 				if link in times:
 					candidates.add(link)
+
 		# Get the intercontact times in [te;td+delta]
 		for candidate in candidates:
-			index_occ = -1
-			i = 1
-                        
-                        #index = bisect.bisect_right(times[candidate], self._te)
-                        #if index < len(times[candidate]) and times[candidate][index] <= td + delta:
-                        #    t = times[candidate][index]
+			sys.stderr.write("c is " + str(candidate) + "\n")              
+			sys.stderr.write("tt is " + str(times[candidate]) + "\n")              
+			index = bisect.bisect_right(times[candidate], self._te)
+			sys.stderr.write(str(index) + "/" + str(len(times[candidate]))+ "\n")
 
-			if self._te in times[candidate]:
-				index_occ = times[candidate].index(self._te)
-			
-			while index_occ + i < len(times[candidate]) and index_occ != -1:
-				if times[candidate][index_occ + i] <= td + delta:
-					if times[candidate][index_occ + i] < t:
-						t = times[candidate][index_occ + i]
-					i += 1
-				else:
-					break
+			if len(times[candidate]) == 1 and index == 1 and times[candidate][index-1] <= td + delta:
+				if times[candidate][index - 1] > self._te:
+					if t>times[candidate][index-1] or t==None: 
+						t = times[candidate][index-1]
+			elif index < len(times[candidate]) and times[candidate][index] <= td + delta:
+				if times[candidate][index - 1] > self._te:
+					if t>times[candidate][index] or t==None:
+						t = times[candidate][index]
 
-		sys.stderr.write("    t = %s\n" % (str(t)))
+		sys.stderr.write("    new_t = %s\n" % (str(t)))
 		return t
 
 	def isClique(self, times, node, delta):
@@ -115,7 +112,8 @@ class Clique:
                         index = index - 1
                         
                         if index >= 0 and times[candidate][index] >= tp - delta:
-                            t = times[candidate][index]
+				if  t<times[candidate][index] and t==None:
+                            		t = times[candidate][index]
 
 		sys.stderr.write("    new_t = %s\n" % (str(t)))
 		return t
