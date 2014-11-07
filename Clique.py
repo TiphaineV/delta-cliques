@@ -66,7 +66,7 @@ class Clique:
 					if t>times[candidate][index-1] or t==None: 
 						t = times[candidate][index-1]
 			elif index < len(times[candidate]) and times[candidate][index] <= td + delta:
-				if times[candidate][index - 1] > self._te:
+				if times[candidate][index] > self._te:
 					if t>times[candidate][index] or t==None:
 						t = times[candidate][index]
 
