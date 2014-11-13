@@ -112,7 +112,7 @@ class Clique:
                         index = index - 1
                         
                         if index >= 0 and times[candidate][index] >= tp - delta:
-				if  t<times[candidate][index] and t==None:
+				if  t<times[candidate][index] or t==None:
                             		t = times[candidate][index]
 
 		sys.stderr.write("    new_t = %s\n" % (str(t)))
