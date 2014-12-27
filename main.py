@@ -62,7 +62,7 @@ if resurrect:
 				# Remove from S
 				clique = line.split(" ")[2] + " " + line.split(" ")[3]
 				nodes = line.split(" ")[2].split(",")
-				duration = line.split(" ")[3].split(",")
+				duration = line.split(" ")[3].split("(")[0].split(",")
 				c = Clique((frozenset(nodes), (int(duration[0]), int(duration[1]))))
 
 				if c in Cm._S:
