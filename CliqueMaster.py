@@ -5,7 +5,7 @@ from collections import deque
 from Clique import Clique
 
 class CliqueMaster:
-	
+
 	def __init__(self):
 		self._S = deque()
 		self._S_set = set()
@@ -17,7 +17,7 @@ class CliqueMaster:
 		""" Adds a clique to S, checking beforehand that this clique is not already present in S. """
 		if not c in self._S_set:
 			#self._S.appendleft(c)
-                        self._S.append(c)
+			self._S.append(c)
 			self._S_set.add(c)
 
 	def getClique(self):
@@ -29,7 +29,7 @@ class CliqueMaster:
 		""" Returns a set of maximal cliques. """
 
 		while len(self._S) != 0:
-                        sys.stderr.write("S:"+ str(len(self._S)) + "\n")
+			sys.stderr.write("S:"+ str(len(self._S)) + "\n")
 			c = self.getClique()
 			is_max = True
 
@@ -49,7 +49,7 @@ class CliqueMaster:
 			else:
 				sys.stderr.write(str(c) + " cannot grow on the right side\n")
 
-			# Grow time on the left side 
+			# Grow time on the left side
 			tp = c.getTp(self._times, delta)
 			if c._tb != tp - delta:
 				new_t = c.getLastTInInterval(self._times, self._nodes, tp, delta)
@@ -85,7 +85,7 @@ class CliqueMaster:
 	def printCliques(self):
 		for c in self._R:
 			sys.stdout.write(str(c) + "\n")
-	
+
 	def __str__(self):
 		msg = ""
 		for c in self._R:
