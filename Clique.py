@@ -3,13 +3,13 @@ import sys
 import bisect
 
 class Clique:
-	def __init__(self, c):
+	def __init__(self, c, candidates=set()):
 		(X,(tb,te)) = c
 		self._X = X
 		self._tb = tb
 		self._te = te
-                self._candidates = set()
-	
+		self._candidates = candidates
+
 	def __eq__(self, other):
 		if self._X == other._X and self._tb == other._tb and self._te == other._te:
 			return True
@@ -21,18 +21,16 @@ class Clique:
 
 	def __str__(self):
 		return ','.join(map(str, list(self._X)))  + " " + str(self._tb) + "," + str(self._te)
-	
+
 	def getAdjacentNodes(self, times, nodes, delta):
             if self._te - self._tb <= delta:
-                self._candidates = set()
-
                 for u in self._X:
                     neighbors = nodes[u]
                     for n in neighbors:
                         # On regarde si le lien est apparu entre tb et te
                         is_present = False
                         if self._tb in times[frozenset([u,n])]:
-				self._candidates.add(n)
+							self._candidates.add(n)
 
                         if self._te in times[frozenset([u,n])]:
                         	self._candidates.add(n)
@@ -56,14 +54,14 @@ class Clique:
 
 		# Get the intercontact times in [te;td+delta]
 		for candidate in candidates:
-			sys.stderr.write("c is " + str(candidate) + "\n")              
-			sys.stderr.write("tt is " + str(times[candidate]) + "\n")              
+			sys.stderr.write("c is " + str(candidate) + "\n")
+			sys.stderr.write("tt is " + str(times[candidate]) + "\n")
 			index = bisect.bisect_right(times[candidate], self._te)
 			sys.stderr.write(str(index) + "/" + str(len(times[candidate]))+ "\n")
 
 			if len(times[candidate]) == 1 and index == 1 and times[candidate][index-1] <= td + delta:
 				if times[candidate][index - 1] > self._te:
-					if t>times[candidate][index-1] or t==None: 
+					if t>times[candidate][index-1] or t==None:
 						t = times[candidate][index-1]
 			elif index < len(times[candidate]) and times[candidate][index] <= td + delta:
 				if times[candidate][index] > self._te:
@@ -95,10 +93,10 @@ class Clique:
 		return True
 
 	def getLastTInInterval(self, times, nodes, tp, delta):
-		# Plus petit t entre tb et tp - delta impliquant (u,v) ? 
+		# Plus petit t entre tb et tp - delta impliquant (u,v) ?
 		t = None
 		# Bien extraire tous les noeuds de la clique et du voisinage de chaque noeud de la clique (c'est ici qu'on fait grossir le temps pour pouvoir ajouter des noeuds)
-		
+
 		# Get all links implying at least one of X's nodes.
 		candidates = set()
 		for u in self._X:
@@ -110,7 +108,7 @@ class Clique:
 		for candidate in candidates:
                         index = bisect.bisect_left(times[candidate], self._tb)
                         index = index - 1
-                        
+
                         if index >= 0 and times[candidate][index] >= tp - delta:
 				if  t<times[candidate][index] or t==None:
                             		t = times[candidate][index]
@@ -135,7 +133,7 @@ class Clique:
 			td = self._te - delta
 		sys.stderr.write("    td = %d\n" % (td))
 		return td
-	
+
 	def getTp(self, times, delta):
 		# Pour chaque lien dans X, Récupérer dans T les temps x tq te-delta < x < te. Si len(T) = 1, regarder si x est plus petit que le tmin déjà connu.
 		tp = 0
@@ -154,7 +152,7 @@ class Clique:
 			tp = self._tb + delta
 		sys.stderr.write("    tp = %d\n" % (tp))
 		return tp
-	
+
 
 if __name__ == '__main__':
 	c = Clique((frozenset([1,2,3]), (1,3)))

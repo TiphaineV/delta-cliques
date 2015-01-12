@@ -38,11 +38,11 @@ class CliqueMaster:
 			if c._te != td + delta:
 				new_t = c.getFirstTInInterval(self._times, self._nodes, td, delta)
 				if new_t is not None:
-					c_add = Clique((c._X, (c._tb, new_t)))
+					c_add = Clique((c._X, (c._tb, new_t)), c._candidates)
 					sys.stderr.write("Adding " + str(c_add) + " (time extension)\n")
 					self.addClique(c_add)
 				else:
-					c_add = Clique((c._X, (c._tb, td + delta)))
+					c_add = Clique((c._X, (c._tb, td + delta)), c._candidates)
 					self.addClique(c_add)
 					sys.stderr.write("Adding " + str(c_add) + " (time delta extension)\n")
 				is_max = False
@@ -54,11 +54,11 @@ class CliqueMaster:
 			if c._tb != tp - delta:
 				new_t = c.getLastTInInterval(self._times, self._nodes, tp, delta)
 				if new_t is not None:
-					c_add = Clique((c._X, (new_t , c._te)))
+					c_add = Clique((c._X, (new_t , c._te)), c._candidates)
 					self.addClique(c_add)
 					sys.stderr.write("Adding " + str(c_add) + "(left time extension)\n")
 				else:
-					c_add = Clique((c._X, (tp - delta, c._te)))
+					c_add = Clique((c._X, (tp - delta, c._te)), c._candidates)
 					self.addClique(c_add)
 					sys.stderr.write("Adding " + str(c_add) + " (left time delta extension)\n")
 				is_max = False
@@ -72,7 +72,7 @@ class CliqueMaster:
 			for node in candidates:
 				if c.isClique(self._times, node, delta):
 					Xnew = set(c._X).union([node])
-					c_add = Clique((frozenset(Xnew), (c._tb, c._te)))
+					c_add = Clique((frozenset(Xnew), (c._tb, c._te)), c._candidates)
 					self.addClique(c_add)
 					sys.stderr.write("Adding " + str(c_add) + " (node extension)\n")
 					is_max = False
