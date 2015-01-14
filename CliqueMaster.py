@@ -72,6 +72,7 @@ class CliqueMaster:
 			for node in candidates:
 				if c.isClique(self._times, node, delta):
 					Xnew = set(c._X).union([node])
+					sys.stderr.write(str(candidates) + " VS " + str(c._candidates) + "\n")
 					c_add = Clique((frozenset(Xnew), (c._tb, c._te)), c._candidates)
 					self.addClique(c_add)
 					sys.stderr.write("Adding " + str(c_add) + " (node extension)\n")

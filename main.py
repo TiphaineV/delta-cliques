@@ -34,7 +34,7 @@ for line in sys.stdin:
 
 	# This a new instance
 	if not resurrect:
-		Cm.addClique(Clique((link, time)))
+		Cm.addClique(Clique((link, time), set([])))
 
 	# Populate data structures
 	if not times.has_key(link):

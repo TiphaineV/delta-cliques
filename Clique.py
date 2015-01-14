@@ -3,7 +3,7 @@ import sys
 import bisect
 
 class Clique:
-	def __init__(self, c, candidates=set()):
+	def __init__(self, c, candidates=set([])):
 		(X,(tb,te)) = c
 		self._X = X
 		self._tb = tb
@@ -23,21 +23,18 @@ class Clique:
 		return ','.join(map(str, list(self._X)))  + " " + str(self._tb) + "," + str(self._te)
 
 	def getAdjacentNodes(self, times, nodes, delta):
-            if self._te - self._tb <= delta:
-                for u in self._X:
-                    neighbors = nodes[u]
-                    for n in neighbors:
-                        # On regarde si le lien est apparu entre tb et te
-                        is_present = False
-                        if self._tb in times[frozenset([u,n])]:
-							self._candidates.add(n)
+		if self._te - self._tb <= delta:
+			for u in self._X:
+				neighbors = nodes[u]
+				for n in neighbors:
+					# On regarde si le lien est apparu entre tb et te
+					if self._tb in times[frozenset([u,n])]:
+						self._candidates.add(n)
+					if self._te in times[frozenset([u,n])]:
+						self._candidates.add(n)
 
-                        if self._te in times[frozenset([u,n])]:
-                        	self._candidates.add(n)
-
-
-                    self._candidates = self._candidates.difference(self._X)
-	    return self._candidates
+		self._candidates = self._candidates.difference(self._X)
+		return self._candidates
 
 	def getFirstTInInterval(self, times, nodes, td, delta):
 		# Plus petit t entre te et td + delta impliquant (u,v) ?
@@ -54,10 +51,7 @@ class Clique:
 
 		# Get the intercontact times in [te;td+delta]
 		for candidate in candidates:
-			sys.stderr.write("c is " + str(candidate) + "\n")
-			sys.stderr.write("tt is " + str(times[candidate]) + "\n")
 			index = bisect.bisect_right(times[candidate], self._te)
-			sys.stderr.write(str(index) + "/" + str(len(times[candidate]))+ "\n")
 
 			if len(times[candidate]) == 1 and index == 1 and times[candidate][index-1] <= td + delta:
 				if times[candidate][index - 1] > self._te:
