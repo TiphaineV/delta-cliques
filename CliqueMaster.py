@@ -56,7 +56,7 @@ class CliqueMaster:
 				if new_t is not None:
 					c_add = Clique((c._X, (new_t , c._te)), c._candidates)
 					self.addClique(c_add)
-					sys.stderr.write("Adding " + str(c_add) + "(left time extension)\n")
+					sys.stderr.write("Adding " + str(c_add) + " (left time extension)\n")
 				else:
 					c_add = Clique((c._X, (tp - delta, c._te)), c._candidates)
 					self.addClique(c_add)
