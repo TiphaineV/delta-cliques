@@ -26,8 +26,8 @@ else:
 for line in sys.stdin:
 	contents = line.split(" ")
 	t = int(contents[0])
-	u = int(contents[1])
-	v = int(contents[2])
+	u = contents[1].strip()
+	v = contents[2].strip()
 
 	link = frozenset([u,v])
 	time = (t,t)
