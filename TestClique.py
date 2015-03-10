@@ -139,7 +139,7 @@ class TestClique(unittest.TestCase):
 		    Clique((frozenset([1, 2]), (1, 1))),
 		    Clique((frozenset([2, 3]), (2, 2))),
 		    Clique((frozenset([1, 3]), (3, 3))),
-		    Clique((frozenset([1, 2]), (4, 4))),
+		    Clique((frozenset([1, 2]), (4, 4)))
 		])
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [3], frozenset([1, 2]): [1, 4], frozenset([2, 3]): [2]}
@@ -156,6 +156,38 @@ class TestClique(unittest.TestCase):
 		for c in R_expected:
 			debug_msg += str(c) + "\n"
 		self.assertEqual(R, R_expected, debug_msg)
+	
+	def test_simultaneous_links(self):
+		self.Cm._S = deque([
+			Clique((frozenset([1,2]),(1,1))),
+			Clique((frozenset([2,3]),(1,1))),
+			Clique((frozenset([1,3]),(1,1)))
+		])
+
+		self.Cm._nodes = {1: set([2,3]), 2: set([1,3]), 3: set([1,2])}
+		self.Cm._times = {frozenset([1,2]): [1], frozenset([2,3]): [1], frozenset([1,3]): [1]}
+
+		R = self.Cm.getDeltaCliques(5)
+		R_expected = set([Clique((frozenset([1,2,3]), (-4,6)))])
+		self.assertEqual(R, R_expected)
+
+	def test_simultaneous_links_with_repeat(self):
+		self.Cm._S = deque([
+			Clique((frozenset([1,2]),(1,1))),
+			Clique((frozenset([2,3]),(1,1))),
+			Clique((frozenset([1,3]),(1,1))),
+			Clique((frozenset([2,3]),(3,3)))
+		])
+
+		self.Cm._nodes = {1: set([2,3]), 2: set([1,3]), 3: set([1,2])}
+		self.Cm._times = {frozenset([1,2]): [1], frozenset([2,3]): [1,3], frozenset([1,3]): [1]}
+
+		R = self.Cm.getDeltaCliques(5)
+		R_expected = set([
+			Clique((frozenset([1,2,3]), (-4,6))),
+			Clique((frozenset([2,3]), (-4,8)))
+		])
+		self.assertEqual(R, R_expected)
 if __name__ == '__main__':
 	suite = unittest.TestLoader().loadTestsFromTestCase(TestClique)
 	unittest.TextTestRunner(verbosity=2).run(suite)
