@@ -71,7 +71,7 @@ class Clique:
 		for i in self._X:
 			if frozenset([i, node]) not in times.keys():
 				# Verifier que le lien existe
-				sys.stderr.write("(%d, %d) does not exist\n" % (i, node))
+				sys.stderr.write("(%s, %s) does not exist\n" % (i, node))
 				return False
 			else:
 				# Verifier qu'il apparaît tous les delta entre tb et te
