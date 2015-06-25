@@ -10,15 +10,17 @@ nb_lines = 0
 resurrect = False
 
 # Read arguments from command line
-if len(sys.argv) == 2 and "resurrect" not in sys.argv[1]:
+if len(sys.argv) == 3 and "resurrect" not in sys.argv[1]:
     delta = int(sys.argv[1])
+    treshold = float(sys.argv[2])
+
 elif len(sys.argv) == 4:
     if "resurrect" in sys.argv[2]:
         resurrect = True
         delta = int(sys.argv[1])
 else:
     sys.stderr.write(
-        "Usage: cat <stream> | python main.py <delta> [--resurrect=<err_file>]\
+        "Usage: cat <stream> | python main.py <delta> <treshold> [--resurrect=<err_file>]\
         \n\n")
     sys.stderr.write("  --resurrect: Recover previous instance by providing\
     an stderr output \
@@ -102,6 +104,6 @@ if resurrect:
             sys.stderr.write(line)
 
 # Restart execution
-R = Cm.getDeltaCliques(delta)
-sys.stdout.write("# delta = %d\n" % (delta))
+R = Cm.getDeltaCliques(delta, treshold)
+sys.stdout.write("# delta = %d %d\n" % (delta))
 Cm.printCliques()

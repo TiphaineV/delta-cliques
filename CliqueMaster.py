@@ -17,8 +17,8 @@ class CliqueMaster:
         """ Adds a clique to S,
         checking beforehand that this clique is not already present in S. """
         if c not in self._S_set:
-            # self._S.appendleft(c)
-            self._S.append(c)
+            self._S.appendleft(c)
+            #self._S.append(c)
             self._S_set.add(c)
 
     def getClique(self):
@@ -28,9 +28,14 @@ class CliqueMaster:
 
     def getDeltaCliques(self, delta):
         """ Returns a set of maximal cliques. """
+        iternum = 0
+        maxsize = 0
+        maxdur = 0
 
         while len(self._S) != 0:
+            iternum += 1
             sys.stderr.write("S:" + str(len(self._S)) + "\n")
+            sys.stderr.write("T " + str(iternum) + " " + str(len(self._R)) + "\n")
             c = self.getClique()
             is_max = True
 
@@ -82,6 +87,9 @@ class CliqueMaster:
 
             if is_max:
                 sys.stderr.write(str(c) + " is maximal\n")
+                maxsize = max(maxsize, len(c._X))
+                maxdur = max(maxdur, c._te - c._tb)
+                sys.stderr.write("M " + str(iternum) + " " + str(maxsize) + " " + str(maxdur) + "\n")
                 self._R.add(c)
         return self._R
 
