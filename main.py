@@ -18,6 +18,10 @@ else:
         \n\n")
     sys.exit(1)
 
+if delta < 0:
+    sys.stderr.write("Delta must be positive.\n")
+    sys.exit(1)
+
 # Read stream
 for line in sys.stdin:
     contents = line.split(" ")
@@ -50,6 +54,6 @@ Cm._nodes = nodes
 sys.stderr.write("Processed " + str(nb_lines) + " from stdin\n")
 
 # Restart execution
-R = Cm.getDeltaCliques(delta, treshold)
-sys.stdout.write("# delta = %d %d\n" % (delta))
+R = Cm.getDeltaCliques(delta)
+sys.stdout.write("# delta = %d\n" % (delta))
 Cm.printCliques()
