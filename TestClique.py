@@ -56,7 +56,6 @@ class TestClique(unittest.TestCase):
         debug_msg += "\nExpected :\n"
         for c in R_expected:
             debug_msg += str(c) + "\n"
-        print(debug_msg)
         self.assertEqual(R, R_expected, debug_msg)
 
     def test_two_links_alterning(self):
