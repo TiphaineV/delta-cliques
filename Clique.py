@@ -40,7 +40,7 @@ class Clique:
         """ returns True if X(c) union node is a clique over tb;te, False otherwise"""
 
         for i in self._X:
-            if frozenset([i, node]) not in times.keys():
+            if frozenset([i, node]) not in times:
                 # Verifier que le lien existe
                 sys.stderr.write("(%s, %s) does not exist\n" % (i, node))
                 return False
